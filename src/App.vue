@@ -1,0 +1,75 @@
+<script>
+	export default {
+		onLaunch: function() {
+			console.log('App Launch')
+		},
+		onShow: function() {
+			console.log('App Show')
+		},
+		onHide: function() {
+			console.log('App Hide')
+		},
+	}
+</script>
+
+<style>
+	/*每个页面公共css */
+	@import url('static/free.css');
+	@import url('static/iconfont.css');
+
+	html,
+	body {
+		margin: 0;
+		padding: 0;
+		/* overflow: hidden; */
+		color: #3C4043;
+		height: 100%;
+		font-size: 24rpx;
+	}
+
+	.canDrag {
+		-webkit-app-region: drag;
+	}
+
+	.noDrag {
+		-webkit-app-region: no-drag;
+	}
+
+	.index-top {
+		/* color: #3C4043; */
+		/* height: 30px; */
+		/* background-color: hotpink; */
+		background: linear-gradient(#ff5bb0, #ef027d);
+		/* width: 100%; */
+		-webkit-app-region: drag;
+		-webkit-user-select: none;
+	}
+
+	.top-icon {
+		/* background-color: #3C4043; */
+	}
+
+	.top-icon:hover {
+		background-color: lightpink;
+	}
+
+	.main-bg {
+		background-color: #F3F4F6;
+	}
+
+	::-webkit-scrollbar {
+		width: 4px;
+		height: 9px;
+	}
+
+	/* 滚动条整体宽度 */
+	::-webkit-scrollbar-track {
+		background-color: #eee;
+	}
+
+	/*滚动条背景色*/
+	::-webkit-scrollbar-thumb {
+		background-color: #E0E0E0;
+		border-radius: 8px;
+	}
+</style>

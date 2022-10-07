@@ -1,0 +1,27 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "可昕的闹钟"
+			}
+		}, {
+			"path": "pages/child1/child1",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8",
+		"rpxCalcMaxDeviceWidth": 300,
+		"rpxCalcBaseDeviceWidth": 300,
+		"rpxCalcIncludeWidth": 300,
+		"navigationStyle": "custom"
+	}
+}
