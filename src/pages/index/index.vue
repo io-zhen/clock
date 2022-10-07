@@ -1,67 +1,67 @@
 <template>
 	<!-- topMenu -->
-	<view class="bg-white rounded-lg shadow" style="overflow: hidden;">
+
+	<view class="bg-white rounded-lg shadow position-relative" style="overflow: hidden;">
+
 		<top-menu></top-menu>
+		<vue-particles class="login-bg" color="#F72D96" :particleOpacity="0.5" :particlesNumber="150" shapeType="star"
+			:particleSize="8" linesColor="#FDC0CC" :linesWidth="1" :lineLinked="true" :lineOpacity="0.5"
+			:linesDistance="150" :moveSpeed="1" :hoverEffect="true" hoverMode="grab" :clickEffect="true"
+			clickMode="repulse">
+		</vue-particles>
 		<view class="text-center text-dark p-1 flex flex-column justify-center">
-			<view class="flex justify-center border-bottom">
-				<text class="pb-2 letterSpacing3 linear-gradient-text flex align-center font-weight-bolder"
-					style="font-size: 60px;">
+			<view class="text-center flex flex-column">
+				<view class=" pb-2 letterSpacing3 linear-gradient-text font-weight-bolder" style="font-size: 60px;">
 					{{formatDuration(countSecond)}}
-				</text>
+				</view>
+
 			</view>
-			<view class="mt-3 mb-1 bg-white text-light-black flex  ">
-				<text class="flex align-center mx-1 font-lg font-weight-bold">闹钟设定:</text>
-				<view class="flex align-center border rounded-lg mx-1" style="width: 100px;">
-					<view class=" p-1 font-sm text-white  border-right">
-						<text class="iconfont icon-jian text-dark opacity3" @click="reduceSecond"></text>
-					</view>
-					<view class="font-md  flex-1">{{setSecondStyle()}}</view>
-					<view class="p-1 font-sm text-white  border-left">
-						<text class="iconfont icon-jia text-dark opacity3" @click="addSecond"></text>
+			<view class="bottom flex flex-column">
+				<view class="flex align-center">
+					<view class="myicon iconfont icon-notice"></view>
+					<view style="color: pink;" class="mt-2 pl-2 flex align-center justify-center">
+						当前铃声：{{music_name}}
 					</view>
 				</view>
-				<view class="flex ml-2">
-					<text class="buttonClass mx-1" @click="timer2">确 定</text>
-					<text class="buttonClass mx-1" @click="closeTimer(0)">关 闭</text>
+				<view class="setView flex bg-white  ">
+					<view class="flex align-center border rounded-lg mx-1" style="width: 100px;">
+						<view class="border-right">
+							<text class="p-1  font-sm iconfont icon-jian text-dark" @click="reduceSecond"></text>
+						</view>
+						<view class="font-md flex-1 p-0">{{setSecondStyle()}}</view>
+						<view class="border-left">
+							<text class="iconfont font-sm p-1 icon-jia text-dark " @click="addSecond"></text>
+						</view>
+					</view>
+					<view class="flex ml-2 align-center">
+						<text v-if="timerStatus==0" class="buttonClass mx-1" @click="timer2">设 定</text>
+						<text v-if="timerStatus==1" class="buttonClass mx-1" @click="closeTimer(0)">关 闭</text>
+						<text @click="toIpcMain('open-changeMusic')" class="ml-2 text-danger">换一首</text>
+						<text @click="stopMusic" class="ml-2 text-danger">关闭音乐</text>
+						<text @click="timer(5)" class="ml-2 text-danger">测试</text>
+					</view>
 				</view>
-			</view>
-			<view class="mt-3 mb-1 bg-white text-light-black flex align-center justify-between ">
-				<view class=""><text class="buttonClass mx-1" @click="toIpcMain('open-child')">选择闹铃</text></view>
-				<view class="flex align-center justify-end">
-					<text class="mr-0 font-md">自启动：</text>
-					<switch class="m-0" color="#ff5bb0" style="transform:scale(0.5)" @change="changeAutoStart" />
-				</view>
-				<!-- <text class="buttonClass mx-1" @click="toIpcMain('changeAutoStart-open')">自启动</text>
-					<text class="buttonClass mx-1" @click="toIpcMain('changeAutoStart-close')">关闭自启动</text> -->
 			</view>
 		</view>
+
 	</view>
 </template>
 
 
 <script setup>
-	const {
-		ipcRenderer
-	} = require('electron')
 	import {
 		ref,
 		reactive,
 		onMounted
 	} from "vue"
+	const {
+		ipcRenderer
+	} = require('electron')
 	var schedule = require('node-schedule');
 	let countSecond = ref(0) //倒计时时间
 	let timerStatus = ref(0) //倒计时状态
 	let clock = null //倒计时实例
 	let setSecond = ref(5) //自定义闹钟时间
-
-	function changeAutoStart(e) {
-		const status = e.detail.value
-		if (status) {
-			toIpcMain('changeAutoStart-open')
-		} else {
-			toIpcMain('changeAutoStart-close')
-		}
-	}
 
 	function addSecond() {
 		setSecond.value += 5
@@ -72,7 +72,7 @@
 	}
 
 	function setSecondStyle() {
-		return setSecond.value + '分钟'
+		return setSecond.value.toFixed(0) + '分钟'
 	}
 	const timer = (sec) => {
 		setSecond.value = sec / 60
@@ -114,10 +114,8 @@
 		clock = null
 		countSecond.value = 0
 		timerStatus.value = 0
-
-		uni.removeStorageSync('countSecond')
+		if (innerAudioContext) innerAudioContext.destroy()
 		if (!flag) {
-			if (innerAudioContext) innerAudioContext.destroy()
 			return uni.showToast({
 				title: "已取消！",
 				icon: "none"
@@ -130,19 +128,12 @@
 		})
 	}
 
-	function checkClock() {
-		const storageClock = uni.getStorageSync('countSecond')
-		if (storageClock) {
-			countSecond.value = storageClock
-		}
-	}
 
 	const innerAudioContext = uni.createInnerAudioContext();
 
 	function playMusic() {
 		innerAudioContext.autoplay = false;
-		innerAudioContext.src =
-			'https://bjetxgzv.cdn.bspapp.com/VKCEYUGU-hello-uniapp/2cc220e0-c27a-11ea-9dfb-6da8e309e0d8.mp3';
+		innerAudioContext.src = music_src.value
 		innerAudioContext.onPlay(() => {
 			console.log('开始播放');
 		});
@@ -156,6 +147,10 @@
 			console.log(res.errCode);
 		})
 		innerAudioContext.play()
+	}
+
+	function stopMusic() {
+		innerAudioContext.stop()
 	}
 	//格式化播放时间为00:00：00
 	let formatDuration = (seconds) => {
@@ -175,48 +170,53 @@
 	function toIpcMain(e) {
 		ipcRenderer.send('action', e)
 	}
-	onMounted(() => {})
+	let autoSet = uni.getStorageSync('autoSet')
+	let music_name = ref('默认')
+	let music_src = ref('https://bjetxgzv.cdn.bspapp.com/VKCEYUGU-hello-uniapp/2cc220e0-c27a-11ea-9dfb-6da8e309e0d8.mp3')
+	onMounted(() => {
+		if (autoSet) {
+			timer2()
+		}
+
+		ipcRenderer.on('changeMusic', (e, data) => {
+			console.log(data)
+			innerAudioContext.src = data.src
+			music_name.value = data.title
+			music_src.value = data.src
+		})
+
+	})
 </script>
 
 <style>
-	.my-container {
-		border-radius: 25px;
-		background: #ffffff;
-		box-shadow: 5px 5px 9px #e8e8e8,
-			-5px -5px 9px #ffffff;
+	.login-bg {
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		z-index: 0;
 	}
 
-	.linear-gradient-text {
-		font-family: Georgia, 'Times New Roman', Times, serif;
-		font-weight: bolder;
-		background: linear-gradient(to right, hotpink, pink);
-		-webkit-background-clip: text;
-		background-clip: text;
-		color: transparent;
-	}
-
-	.buttonClass {
-		display: flex;
-		justify-content: center;
-		align-items: center;
+	.myicon {
+		position: relative;
+		top: 3px;
 		font-size: 12px;
-		/* width: 45px; */
-		padding: 0px 6px;
-		height: 25px;
-		border-width: 1px;
-		color: #666666;
-		border-color: #dcdcdc;
-		border-top-left-radius: 6px;
-		border-top-right-radius: 6px;
-		border-bottom-left-radius: 6px;
-		border-bottom-right-radius: 6px;
-		box-shadow: inset 0px 1px 0px 0px #ffffff;
-		text-shadow: inset 0px 1px 0px #ffffff;
-		background: linear-gradient(#f9f9f9, #e9e9e9);
+		color: pink;
 	}
 
-	.buttonClass:hover {
-		cursor: pointer;
-		background: linear-gradient(#e9e9e9, #f9f9f9);
+	.bottom {
+		border-top: 1px solid #eee;
+	}
+
+	.bottom:hover .setView {
+		opacity: .8;
+		height: 100%;
+		margin-top: 8px;
+		margin-bottom: 5px;
+	}
+
+	.setView {
+		opacity: 0;
+		height: 0px;
+		transition: all 0.4s ease-in-out;
 	}
 </style>

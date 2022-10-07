@@ -1,8 +1,20 @@
 <template>
-	<child-top-menu></child-top-menu>
-	<view class="bg-white p-2 shadow rounded-bottom-lg">
+	<top-menu title="闹铃选择" :isChild="true"></top-menu>
+	<view class="box bg-white p-2  shadow rounded-bottom-lg">
 		<!-- <audio :src="src" :poster="" :name="" :author="" :action="" controls></audio> -->
-		<view class="font-lg" v-for="item in musicList.value" @click="play(item)">{{item.title}}</view>
+		<view class="font flex align-center justify-between border-bottom p-1" v-for="item in musicList.value">
+			<view>
+				{{item.title}}
+			</view>
+			<view class="flex">
+				<view class="ml-2 font buttonClass" @click="play(item)">
+					播放
+				</view>
+				<view class="ml-2 font buttonClass" @click="changeMusic(item)">
+					设定
+				</view>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -22,13 +34,15 @@
 		console.log(item)
 		playMusic(item.music_src)
 	}
-	const requestTask = uni.request({
-		url: 'https://www.example.com/request', //仅为示例，并非真实接口地址。
-		success: function(res) {
-			console.log(res.data);
-		}
-	})
-	// 中断请求任务
+
+	function changeMusic(item) {
+		console.log(item.title)
+		// uni.$emit('music_src', item)
+		ipcRenderer.send('music_src', {
+			src: item.music_src,
+			title: item.title
+		})
+	}
 	const innerAudioContext = uni.createInnerAudioContext();
 
 	function playMusic(src) {
@@ -58,5 +72,9 @@
 </script>
 
 <style>
-
+	.box {
+		height: 210px;
+		overflow-y: scroll;
+		overflow-x: hidden;
+	}
 </style>

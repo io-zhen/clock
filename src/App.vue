@@ -55,6 +55,41 @@
 
 	.main-bg {
 		background-color: #F3F4F6;
+		color: royalblue;
+	}
+
+	.linear-gradient-text {
+		font-family: Georgia, 'Times New Roman', Times, serif;
+		font-weight: bolder;
+		background: linear-gradient(to right, deeppink, hotpink, yellowgreen, royalblue, pink, skyblue, deeppink, pink);
+		-webkit-background-clip: text;
+		background-clip: text;
+		color: transparent;
+	}
+
+	.buttonClass {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		font-size: 12px;
+		/* width: 45px; */
+		padding: 0px 6px;
+		height: 25px;
+		border-width: 1px;
+		color: white;
+		border-color: #dcdcdc;
+		border-top-left-radius: 6px;
+		border-top-right-radius: 6px;
+		border-bottom-left-radius: 6px;
+		border-bottom-right-radius: 6px;
+		box-shadow: inset 0px 1px 0px 0px #ffffff;
+		text-shadow: inset 0px 1px 0px #ffffff;
+		background: linear-gradient(hotpink, pink);
+	}
+
+	.buttonClass:hover {
+		cursor: pointer;
+		background: linear-gradient(pink, hotpink);
 	}
 
 	::-webkit-scrollbar {

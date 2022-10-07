@@ -6,9 +6,16 @@
 				"navigationBarTitleText": "可昕的闹钟"
 			}
 		}, {
-			"path": "pages/child1/child1",
+			"path": "pages/changeMusic/changeMusic",
 			"style": {
-				"navigationBarTitleText": "",
+				"navigationBarTitleText": "闹铃选择",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/config/config",
+			"style": {
+				"navigationBarTitleText": "系统设置",
 				"enablePullDownRefresh": false
 			}
 

@@ -1,11 +1,11 @@
 {
 	"name": "KXKY-clock",
-	"version": "0.0.1",
+	"version": "1.0.1",
 	"main": "./src/electron/electron.js",
 	"description": "KXKY-clock by Wang 2022-10-05",
 	"author": {
 		"email": "947876@qq.com",
-		"name": "Wang"
+		"name": "WangZhen.CC"
 	},
 	"build": {
 		"appId": "com.wangzhen.cc.",
@@ -87,6 +87,7 @@
 		"@vueuse/core": "^9.2.0",
 		"electron-is-dev": "^2.0.0",
 		"node-schedule": "^2.1.0",
+		"vue-particles": "^1.0.9",
 		"vue": "^3.2.37",
 		"vuex": "4.0.0"
 	},
